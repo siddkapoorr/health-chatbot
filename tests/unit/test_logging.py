@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from health_intake.logging_config import RedactionFilter
 
@@ -23,3 +24,19 @@ def test_redacts_long_digit_runs():
 
 def test_keeps_safe_text():
     assert _redact("advanced to step address") == "advanced to step address"
+
+
+def test_configure_logging_creates_log_file_and_redacts(tmp_path):
+    from health_intake.logging_config import configure_logging
+
+    log_dir = tmp_path / "logs"
+    configure_logging("DEBUG", log_dir)
+
+    test_logger = logging.getLogger("test.configure")
+    test_logger.info("Email: john@example.com DOB: 1990-03-05")
+
+    log_file = log_dir / "session.log"
+    assert log_file.exists()
+    content = log_file.read_text()
+    assert "[REDACTED_EMAIL]" in content
+    assert "john@example.com" not in content
