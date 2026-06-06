@@ -9,7 +9,7 @@ def test_settings_load_from_env(monkeypatch):
 
     settings = Settings()
 
-    assert settings.openai_api_key == "sk-test"
+    assert settings.openai_api_key.get_secret_value() == "sk-test"
     assert settings.openai_model == "gpt-4o-mini"
     assert settings.skip_address_validation is False
 

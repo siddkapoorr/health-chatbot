@@ -3,7 +3,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field, model_validator
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,9 +12,9 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    openai_api_key: str = Field(..., min_length=1)
+    openai_api_key: SecretStr
     openai_model: str = "gpt-4o-mini"
-    google_maps_api_key: str | None = None
+    google_maps_api_key: SecretStr | None = None
     skip_address_validation: bool = False
     log_level: str = "INFO"
     output_dir: Path = Path("./output")
@@ -31,4 +31,6 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     """Return a cached Settings instance."""
+    # type: ignore[call-arg] is needed because pydantic-settings + lru_cache
+    # have mypy compatibility issues with the decorator wrapping
     return Settings()  # type: ignore[call-arg]
