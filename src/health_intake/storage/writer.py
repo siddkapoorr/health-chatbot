@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 def write_record(record: IntakeRecord, output_dir: Path) -> Path:
     """Write the record to ``output_dir/intake-<session_id>.json`` and return the path."""
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
     path = output_dir / f"intake-{record.session_id}.json"
     path.write_text(record.model_dump_json(indent=2))
+    path.chmod(0o600)  # PHI — restrict to owner read/write only
     logger.info("Wrote intake record for session %s", record.session_id)
     return path
