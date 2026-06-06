@@ -23,3 +23,13 @@ def test_with_draft_replaces_draft():
 
     assert state.draft.full_name is None
     assert updated.draft.full_name == "Jane"
+
+
+def test_with_step_advances_state():
+    state = ConversationState(session_id="s1", current_step=Step.GREETING, draft=RecordDraft())
+
+    updated = state.with_step(Step.PATIENT_INFO)
+
+    assert state.current_step == Step.GREETING  # original unchanged
+    assert updated.current_step == Step.PATIENT_INFO
+    assert updated is not state
