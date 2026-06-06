@@ -2,7 +2,7 @@
 name = "health-intake"
 version = "0.1.0"
 description = "Terminal LLM chatbot for patient intake"
-authors = ["Your Name <you@example.com>"]
+authors = ["Siddharth Kapoor <sidkapoor39@gmail.com>"]
 readme = "README.md"
 packages = [{ include = "health_intake", from = "src" }]
 
