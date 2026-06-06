@@ -28,9 +28,13 @@ def build_situation(step: Step, errors: list[str], advancing: bool, extra: str =
     """
     lines = [f"Current step: {step.value}.", _STEP_GOALS[step]]
     if errors:
-        lines.append("The patient's last input had problems. Re-ask, mentioning: " + " ".join(errors))
+        lines.append(
+            "The patient's last input had problems. Re-ask, mentioning: " + " ".join(errors)
+        )
     elif advancing:
-        lines.append("All required info for this step is valid. Acknowledge and advance to the next topic.")
+        lines.append(
+            "All required info for this step is valid. Acknowledge and advance to the next topic."
+        )
     if extra:
         lines.append(extra)
     return "\n".join(lines)
