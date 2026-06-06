@@ -3,7 +3,7 @@ from health_intake.llm.client import FakeLLMClient
 from health_intake.models.conversation import ChatMessage
 
 
-def test_fake_client_returns_scripted_extraction_and_reply():
+def test_fake_client_returns_scripted_extraction_and_reply() -> None:
     client = FakeLLMClient(
         extractions=[FieldExtraction(full_name="Jane Doe")],
         replies=["Thanks, Jane!"],

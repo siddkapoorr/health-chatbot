@@ -2,7 +2,7 @@
 
 import logging
 from collections.abc import Sequence
-from typing import Protocol
+from typing import Any, Protocol
 
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -19,8 +19,8 @@ class LLMClient(Protocol):
     def generate(self, system: str, messages: Sequence[ChatMessage], situation: str) -> str: ...
 
 
-def _to_openai(system: str, messages: Sequence[ChatMessage]) -> list[dict]:
-    payload: list[dict] = [{"role": "system", "content": system}]
+def _to_openai(system: str, messages: Sequence[ChatMessage]) -> list[dict[str, Any]]:
+    payload: list[dict[str, Any]] = [{"role": "system", "content": system}]
     payload.extend({"role": m.role, "content": m.content} for m in messages if m.role != "system")
     return payload
 
@@ -34,7 +34,7 @@ class OpenAIClient:
     def extract(self, system: str, messages: Sequence[ChatMessage]) -> FieldExtraction:
         completion = self._client.beta.chat.completions.parse(
             model=self._model,
-            messages=_to_openai(system, messages),
+            messages=_to_openai(system, messages),  # type: ignore[arg-type]
             response_format=FieldExtraction,
             temperature=0,
         )
@@ -46,7 +46,7 @@ class OpenAIClient:
         convo = _to_openai(system, messages)
         convo.append({"role": "system", "content": f"Situation: {situation}"})
         completion = self._client.chat.completions.create(
-            model=self._model, messages=convo, temperature=0.3
+            model=self._model, messages=convo, temperature=0.3  # type: ignore[arg-type]
         )
         return completion.choices[0].message.content or ""
 
