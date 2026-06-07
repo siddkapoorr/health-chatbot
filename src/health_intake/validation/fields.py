@@ -11,7 +11,18 @@ MAX_AGE_YEARS = 120
 MAX_COMPLAINT_LEN = 1000
 _NAME_RE = re.compile(r"^[A-Za-z][A-Za-z\s'\-]*$")
 _INSURANCE_ID_RE = re.compile(r"^[A-Za-z0-9\-]+$")
-_DATE_FORMATS = ("%Y-%m-%d", "%m/%d/%Y", "%d %B %Y", "%B %d, %Y")
+_DATE_FORMATS = (
+    "%Y-%m-%d",    # 1975-01-21
+    "%m/%d/%Y",    # 01/21/1975
+    "%d %B %Y",    # 21 January 1975
+    "%B %d, %Y",   # January 21, 1975
+    "%d %b %Y",    # 21 Jan 1975
+    "%b %d, %Y",   # Jan 21, 1975
+    "%B %Y",       # January 1975  (day defaults to 1)
+    "%b %Y",       # Jan 1975      (day defaults to 1)
+    "%Y %B",       # 1975 January
+    "%Y %b",       # 1975 Jan
+)
 
 
 @dataclass(frozen=True)

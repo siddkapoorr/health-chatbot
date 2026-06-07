@@ -3,7 +3,7 @@
 from collections.abc import Callable
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class FieldExtraction(BaseModel):
@@ -14,7 +14,14 @@ class FieldExtraction(BaseModel):
     """
 
     full_name: str | None = None
-    date_of_birth: str | None = None
+    date_of_birth: str | None = Field(
+        default=None,
+        description=(
+            "Normalize to YYYY-MM-DD. If the user gives only a month and year "
+            "(e.g. 'Jan 1975'), use 01 for the day (e.g. '1975-01-01'). "
+            "Leave null if no date can be determined."
+        ),
+    )
     payer_name: str | None = None
     insurance_id: str | None = None
     chief_complaint: str | None = None
