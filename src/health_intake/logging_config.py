@@ -66,3 +66,6 @@ def configure_logging(level: str, log_dir: Path) -> None:
         handler.addFilter(redaction)
         handler.setFormatter(formatter)
     logging.basicConfig(level=level.upper(), handlers=handlers, force=True)
+    # httpx logs full request URLs including ?key=... query params — suppress to avoid
+    # leaking API keys and to reduce noise in the terminal.
+    logging.getLogger("httpx").setLevel(logging.WARNING)
