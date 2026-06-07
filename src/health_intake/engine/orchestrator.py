@@ -6,8 +6,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
 
-from health_intake.appointments.provider import format_slots, get_slot
 from health_intake.appointments.provider import available_slots as get_available_slots
+from health_intake.appointments.provider import format_slots, get_slot
 from health_intake.config import Settings
 from health_intake.engine.extraction import apply_extraction
 from health_intake.engine.steps import is_step_satisfied, next_step
@@ -20,9 +20,7 @@ from health_intake.validation.address import AddressValidator
 
 logger = logging.getLogger(__name__)
 
-_GREETING = (
-    "Hello! I'm here to help check you in. To start, could you tell me your full name?"
-)
+_GREETING = "Hello! I'm here to help check you in. To start, could you tell me your full name?"
 
 
 @dataclass
@@ -91,9 +89,7 @@ class Orchestrator:
             state = state.with_step(next_step(state.current_step))
         return state
 
-    def _finalize_address(
-        self, step: Step, draft: RecordDraft
-    ) -> tuple[RecordDraft, list[str]]:
+    def _finalize_address(self, step: Step, draft: RecordDraft) -> tuple[RecordDraft, list[str]]:
         if step != Step.ADDRESS or draft.address_validated:
             return draft, []
         if not all((draft.street, draft.city, draft.state, draft.zip_code)):

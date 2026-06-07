@@ -46,7 +46,9 @@ class OpenAIClient:
         convo = _to_openai(system, messages)
         convo.append({"role": "system", "content": f"Situation: {situation}"})
         completion = self._client.chat.completions.create(
-            model=self._model, messages=convo, temperature=0.3  # type: ignore[arg-type]
+            model=self._model,
+            messages=convo,  # type: ignore[arg-type]
+            temperature=0.3,
         )
         return completion.choices[0].message.content or ""
 

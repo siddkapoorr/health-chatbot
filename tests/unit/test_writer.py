@@ -20,8 +20,10 @@ def _record() -> IntakeRecord:
         chief_complaint="cough",
         address=Address(street="1 Main", city="Town", state="CA", zip_code="90001"),
         appointment=Appointment(
-            slot_id="chen-1", provider_name="Dr. Alice Chen",
-            specialty="Family Medicine", start_time=datetime(2026, 6, 7, 9, 0),
+            slot_id="chen-1",
+            provider_name="Dr. Alice Chen",
+            specialty="Family Medicine",
+            start_time=datetime(2026, 6, 7, 9, 0),
         ),
     )
 

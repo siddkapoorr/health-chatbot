@@ -22,13 +22,19 @@ def main() -> int:
 
     configure_logging(settings.log_level, log_dir=settings.output_dir.parent / "logs")
 
+    google_key = (
+        settings.google_maps_api_key.get_secret_value() if settings.google_maps_api_key else ""
+    )
     validator = (
         SkipAddressValidator()
         if settings.skip_address_validation
-        else GoogleAddressValidator(api_key=settings.google_maps_api_key.get_secret_value() if settings.google_maps_api_key else "")
+        else GoogleAddressValidator(api_key=google_key)
     )
     orchestrator = Orchestrator(
-        llm=OpenAIClient(api_key=settings.openai_api_key.get_secret_value(), model=settings.openai_model),
+        llm=OpenAIClient(
+            api_key=settings.openai_api_key.get_secret_value(),
+            model=settings.openai_model,
+        ),
         address_validator=validator,
         settings=settings,
     )

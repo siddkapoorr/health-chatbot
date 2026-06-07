@@ -1,5 +1,8 @@
 """Structured-output schema the LLM fills from user messages."""
 
+from collections.abc import Callable
+from typing import Any
+
 from pydantic import BaseModel
 
 
@@ -45,10 +48,10 @@ def apply_extraction(
     updates: dict[str, object] = {}
     errors: list[str] = []
 
-    def apply(raw: str | None, validator: object, key: str) -> None:
+    def apply(raw: str | None, validator: Callable[[str], Any], key: str) -> None:
         if raw is None:
             return
-        result = validator(raw)  # type: ignore[call-arg]
+        result = validator(raw)
         if result.ok:
             updates[key] = result.value
         elif result.error:

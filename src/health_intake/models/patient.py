@@ -45,9 +45,7 @@ class IntakeRecord(BaseModel):
     appointment: Appointment
 
 
-def build_record(
-    session_id: str, draft: "RecordDraft", appointment: Appointment
-) -> IntakeRecord:
+def build_record(session_id: str, draft: "RecordDraft", appointment: Appointment) -> IntakeRecord:
     """Assemble a complete IntakeRecord from a fully-collected draft.
 
     Assumes the draft has passed all step gates; callers must check completeness first.

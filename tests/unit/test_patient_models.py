@@ -1,13 +1,12 @@
 from datetime import date, datetime
 
+from health_intake.models.conversation import RecordDraft
 from health_intake.models.patient import (
-    Address,
     Appointment,
     Insurance,
     PatientInfo,
     build_record,
 )
-from health_intake.models.conversation import RecordDraft
 
 
 def test_build_record_from_complete_draft():

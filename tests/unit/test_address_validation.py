@@ -1,6 +1,5 @@
 import httpx
 import respx
-
 from health_intake.validation.address import (
     GoogleAddressValidator,
     SkipAddressValidator,
@@ -23,7 +22,9 @@ def test_google_validator_accepts_complete_address():
             json={
                 "result": {
                     "verdict": {"addressComplete": True, "hasUnconfirmedComponents": False},
-                    "address": {"formattedAddress": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA"},
+                    "address": {
+                        "formattedAddress": "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA"
+                    },
                 }
             },
         )

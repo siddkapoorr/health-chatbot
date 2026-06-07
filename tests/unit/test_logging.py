@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 
 from health_intake.logging_config import RedactionFilter
 

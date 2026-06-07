@@ -5,6 +5,7 @@ from health_intake.engine.extraction import FieldExtraction
 from health_intake.engine.orchestrator import Orchestrator
 from health_intake.llm.client import FakeLLMClient
 from health_intake.models.conversation import ConversationState, RecordDraft, Step
+
 from tests.conftest import FakeAddressValidator, make_settings
 
 NOW = datetime(2026, 6, 6, 12, 0)
@@ -26,7 +27,9 @@ def test_happy_path_collects_record_and_writes_json(tmp_path):
         FieldExtraction(full_name="Jane Doe", date_of_birth="1990-03-05"),
         FieldExtraction(payer_name="Acme Health", insurance_id="AH123"),
         FieldExtraction(chief_complaint="sore throat for 3 days"),
-        FieldExtraction(street="1600 Amphitheatre Pkwy", city="Mountain View", state="CA", zip_code="94043"),
+        FieldExtraction(
+            street="1600 Amphitheatre Pkwy", city="Mountain View", state="CA", zip_code="94043"
+        ),
         FieldExtraction(appointment_choice=slot.slot_id),
     ]
     replies = ["ok1", "ok2", "ok3", "ok4", "Thanks, all set!"]

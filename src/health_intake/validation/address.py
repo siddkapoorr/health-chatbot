@@ -1,8 +1,9 @@
 """Address validation via Google Address Validation API, with a skip fallback."""
 
 import logging
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Protocol
+from typing import Any, Protocol
 
 import httpx
 from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
@@ -44,7 +45,7 @@ class GoogleAddressValidator:
         wait=wait_exponential(min=1, max=5),
         reraise=True,
     )
-    def _post(self, payload: dict) -> httpx.Response:
+    def _post(self, payload: Mapping[str, Any]) -> httpx.Response:
         return self._client.post(_ENDPOINT, params={"key": self._api_key}, json=payload)
 
     def validate(self, street: str, city: str, state: str, zip_code: str) -> AddressResult:
