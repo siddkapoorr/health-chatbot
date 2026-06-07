@@ -61,6 +61,19 @@ class GoogleAddressValidator:
         try:
             response = self._post(payload)
             response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            # 4xx means the key lacks permission or the API isn't enabled — not transient.
+            # Degrade gracefully rather than blocking the intake flow indefinitely.
+            if exc.response.status_code in (401, 403):
+                logger.warning(
+                    "Address Validation API returned %s — key may lack permission. "
+                    "Accepting address without validation.",
+                    exc.response.status_code,
+                )
+                formatted = f"{street}, {city}, {state} {zip_code}"
+                return AddressResult(ok=True, formatted=formatted)
+            logger.warning("Address validation request failed: %s", type(exc).__name__)
+            return AddressResult(ok=False, error="Could not reach the address validation service.")
         except httpx.HTTPError as exc:
             logger.warning("Address validation request failed: %s", type(exc).__name__)
             return AddressResult(ok=False, error="Could not reach the address validation service.")
