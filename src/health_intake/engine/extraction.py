@@ -17,9 +17,10 @@ class FieldExtraction(BaseModel):
     date_of_birth: str | None = Field(
         default=None,
         description=(
-            "Normalize to YYYY-MM-DD. If the user gives only a month and year "
-            "(e.g. 'Jan 1975'), use 01 for the day (e.g. '1975-01-01'). "
-            "Leave null if no date can be determined."
+            "Normalize to YYYY-MM-DD only when the user provides all three components: "
+            "day, month, and year. If any component is missing (e.g. only 'Jan 1975' "
+            "with no day, or only '2000' with no month), leave null so the patient can "
+            "be asked for the missing part. Leave null if no date can be determined."
         ),
     )
     payer_name: str | None = None

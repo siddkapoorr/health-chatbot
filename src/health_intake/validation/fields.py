@@ -18,10 +18,6 @@ _DATE_FORMATS = (
     "%B %d, %Y",   # January 21, 1975
     "%d %b %Y",    # 21 Jan 1975
     "%b %d, %Y",   # Jan 21, 1975
-    "%B %Y",       # January 1975  (day defaults to 1)
-    "%b %Y",       # Jan 1975      (day defaults to 1)
-    "%Y %B",       # 1975 January
-    "%Y %b",       # 1975 Jan
 )
 
 
