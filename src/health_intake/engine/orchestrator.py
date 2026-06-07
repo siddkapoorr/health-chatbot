@@ -67,6 +67,7 @@ class Orchestrator:
         errors = errors + address_errors + appt_errors
         state = state.with_draft(draft)
 
+        prior_step = state.current_step
         if not errors:
             state = self._advance(state)
 
@@ -77,7 +78,10 @@ class Orchestrator:
             step=state.current_step,
             errors=errors,
             advancing=not errors,
-            extra=self._appointment_listing(state.current_step),
+            extra=(
+                self._confirmed_summary(prior_step, state.draft)
+                + self._appointment_listing(state.current_step)
+            ),
         )
         message = self._safe_generate(state, situation)
         return self._reply(state, message)
@@ -116,6 +120,20 @@ class Orchestrator:
         if slot is None:
             return draft, ["That appointment slot isn't available. Please pick one from the list."]
         return draft.model_copy(update={"slot_id": slot.slot_id}), []
+
+    def _confirmed_summary(self, step: Step, draft: RecordDraft) -> str:
+        """Return a confirmation string for the step just completed so the LLM echoes it."""
+        if step == Step.PATIENT_INFO:
+            dob = draft.date_of_birth.strftime("%B %d, %Y") if draft.date_of_birth else "unknown"
+            return f"Just confirmed: name = {draft.full_name}, date of birth = {dob}. "
+        if step == Step.INSURANCE:
+            payer = draft.payer_name or "none provided"
+            return f"Just confirmed: insurance payer = {payer}. "
+        if step == Step.ADDRESS:
+            fallback = f"{draft.street}, {draft.city}, {draft.state} {draft.zip_code}"
+            addr = draft.address_formatted or fallback
+            return f"Just confirmed address: {addr}. "
+        return ""
 
     def _appointment_listing(self, step: Step) -> str:
         if step != Step.APPOINTMENT:
